@@ -1,5 +1,6 @@
 function randomizeBudget() {
     const totalMoney = parseFloat(document.getElementById('totalMoney').value);
+    const minMoney = parseInt(document.getElementById('minMoney').value);
     const days = parseInt(document.getElementById('days').value);
 
     // Reset errors
@@ -9,8 +10,13 @@ function randomizeBudget() {
     // Validate inputs
     let hasError = false;
 
-    if (isNaN(totalMoney) || totalMoney < 100) {
+    if (isNaN(totalMoney) || totalMoney < 0) {
         document.getElementById('moneyError').classList.add('show');
+        hasError = true;
+    }
+
+    if (isNaN(minMoney) || minMoney < 0) {
+        document.getElementById('minMoneyError').classList.add('show');
         hasError = true;
     }
 
@@ -20,7 +26,7 @@ function randomizeBudget() {
     }
 
     // Check if minimum budget per day can be met
-    const minPerDay = 100;
+    const minPerDay = minMoney;
     if (!hasError && totalMoney < minPerDay * days) {
         document.getElementById('moneyError').textContent = `จำนวนเงินต้องไม่น้อยกว่า ${minPerDay * days} บาท (${minPerDay} บาท/วัน × ${days} วัน)`;
         document.getElementById('moneyError').classList.add('show');
@@ -108,5 +114,9 @@ document.getElementById('totalMoney').addEventListener('keypress', function (e) 
 });
 
 document.getElementById('days').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') randomizeBudget();
+});
+
+document.getElementById('minMoney').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') randomizeBudget();
 });
